@@ -5,35 +5,22 @@ import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
 import { ContactsSkeleton } from 'components/ContactsSkeleton/ContactsSkeleton';
 import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
+import { add, remove } from 'redux/contactsSlice';
+import { getValue } from 'redux/filterSlice';
 
 export const PhoneBook = () => {
-  const [contacts, setContacts] = useState([]);
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(state => state.contacts.contacts);
+  const dispatch = useDispatch();
+  const filter = useSelector(state => state.filter);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasLocalStorageData, setHasLocalStorageData] = useState(false);
 
   useEffect(() => {
-    try {
-      const isContactsInLocalStorage = localStorage.getItem('contacts');
-      const isContactsInLocalStorageParsed = JSON.parse(
-        isContactsInLocalStorage
-      );
-      if (isContactsInLocalStorageParsed.length > 0) {
-        setIsLoading(true);
-        setContacts(isContactsInLocalStorageParsed);
-        setHasLocalStorageData(true);
-      }
-
+    if (contacts.length > 0) {
+      setIsLoading(true);
       setTimeout(() => setIsLoading(false), 1000);
-    } catch (error) {
-      console.error(error);
     }
   }, []);
-
-  useEffect(
-    () => localStorage.setItem('contacts', JSON.stringify(contacts)),
-    [contacts]
-  );
 
   const onClickBtnAddContact = data => {
     const normalizeName = data.name.toLocaleLowerCase();
@@ -42,15 +29,15 @@ export const PhoneBook = () => {
     );
     renderContactsList
       ? alert(`${data.name} is already in contacts`)
-      : setContacts(prevState => [{ ...data, id: nanoid(5) }, ...prevState]);
+      : dispatch(add({ ...data, id: nanoid(5) }));
   };
 
   const handleFilterOnInputChange = inform => {
-    setFilter(inform);
+    dispatch(getValue(inform));
   };
 
   const handleOnDelete = id => {
-    setContacts(prevState => prevState.filter(item => item.id !== id));
+    dispatch(remove(id));
   };
 
   const normFilter = filter.toLocaleLowerCase();
@@ -80,8 +67,9 @@ export const PhoneBook = () => {
         handleFilterOnInputChange={handleFilterOnInputChange}
         value={filter}
       />
-      {isLoading && hasLocalStorageData && <ContactsSkeleton />}
-      {!isLoading && (
+      {/* {isLoading && hasLocalStorageData && <ContactsSkeleton />} */}
+      {isLoading && <ContactsSkeleton />}
+      {!isLoading && contacts && (
         <ContactList
           data={renderContactsList}
           handleOnDelete={handleOnDelete}
