@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Title, SubTitle } from './PhoneBook.styled';
+import { Box, Title, SubTitle, Plug } from './PhoneBook.styled';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
@@ -16,10 +16,8 @@ export const PhoneBook = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (contacts.length > 0) {
-      setIsLoading(true);
-      setTimeout(() => setIsLoading(false), 1000);
-    }
+    setIsLoading(true);
+    setTimeout(() => setIsLoading(false), 1000);
   }, []);
 
   const onClickBtnAddContact = data => {
@@ -67,8 +65,8 @@ export const PhoneBook = () => {
         handleFilterOnInputChange={handleFilterOnInputChange}
         value={filter}
       />
-      {/* {isLoading && hasLocalStorageData && <ContactsSkeleton />} */}
       {isLoading && <ContactsSkeleton />}
+      {contacts.length === 0 && <Plug> No contacts</Plug>}
       {!isLoading && contacts && (
         <ContactList
           data={renderContactsList}

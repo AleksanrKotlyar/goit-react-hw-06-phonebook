@@ -19,3 +19,9 @@ export const SubTitle = styled.h2`
   margin-bottom: ${p => p.theme.space[5]}px;
   margin-top: ${p => p.theme.space[4]}px;
 `;
+
+export const Plug = styled.p`
+  font-size: ${p => p.theme.fontSizes.s}px;
+  margin-top: ${p => p.theme.space[3]}px;
+  padding-left: ${p => p.theme.space[3]}px;
+`;
