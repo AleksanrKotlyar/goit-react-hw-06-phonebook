@@ -3,10 +3,12 @@ import { AiOutlineUserAdd } from 'react-icons/ai';
 import { Box } from '../PhoneBook.styled';
 import { SubmitBtn, LabelForm, InputForm } from './ContactForm.styled';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 export const ContactForm = ({ onSubmitForm }) => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const contacts = useSelector(state => state.contacts.contacts);
 
   const handleOnInputChange = e => {
     switch (e.target.name) {
@@ -24,8 +26,15 @@ export const ContactForm = ({ onSubmitForm }) => {
   const handleOnSubmit = e => {
     e.preventDefault();
     onSubmitForm({ name: name, number: number });
-    setName('');
-    setNumber('');
+
+    const normalizeName = name.toLocaleLowerCase();
+    const IsContactinList = contacts.find(
+      contact => contact.name.toLocaleLowerCase() === normalizeName
+    );
+    if (!IsContactinList) {
+      setName('');
+      setNumber('');
+    }
   };
 
   return (
