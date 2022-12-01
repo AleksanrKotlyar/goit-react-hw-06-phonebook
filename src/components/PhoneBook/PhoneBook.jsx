@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
 import { add, remove } from 'redux/contactsSlice';
 import { getValue } from 'redux/filterSlice';
+import '../Utils/index.css';
 
 export const PhoneBook = () => {
   const contacts = useSelector(state => state.contacts.contacts);
@@ -54,7 +55,9 @@ export const PhoneBook = () => {
       max-height="100vh"
       border="normal"
       borderRadius="normal"
-      borderColor="green"
+      borderColor="#3d341aba"
+      boxShadow="base"
+      // boxShadow="0px 5px 15px rgba(0, 0, 0, 0.75)"
       as="section"
     >
       <Title>Phonebook</Title>
