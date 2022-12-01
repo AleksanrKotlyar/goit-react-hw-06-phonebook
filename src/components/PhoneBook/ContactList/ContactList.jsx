@@ -13,7 +13,6 @@ export const ContactList = () => {
     contact.name.toLocaleLowerCase().includes(normFilter)
   );
 
-  console.log(renderContactsList);
   return (
     <Box mr="auto" ml="auto" mt="5px" pl="2" as="ul">
       {renderContactsList.map(({ id, name, number }) => (
