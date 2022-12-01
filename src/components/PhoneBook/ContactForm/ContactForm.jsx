@@ -1,14 +1,17 @@
 import { useState } from 'react';
+import { nanoid } from 'nanoid';
 import { AiOutlineUserAdd } from 'react-icons/ai';
 import { Box } from '../PhoneBook.styled';
 import { SubmitBtn, LabelForm, InputForm } from './ContactForm.styled';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+// import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { add } from 'redux/contactsSlice';
 
-export const ContactForm = ({ onSubmitForm }) => {
+export const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const contacts = useSelector(state => state.contacts.contacts);
+  const dispatch = useDispatch();
 
   const handleOnInputChange = e => {
     switch (e.target.name) {
@@ -25,13 +28,15 @@ export const ContactForm = ({ onSubmitForm }) => {
 
   const handleOnSubmit = e => {
     e.preventDefault();
-    onSubmitForm({ name: name, number: number });
-
     const normalizeName = name.toLocaleLowerCase();
-    const IsContactinList = contacts.find(
+    const IsContactInList = contacts.find(
       contact => contact.name.toLocaleLowerCase() === normalizeName
     );
-    if (!IsContactinList) {
+    IsContactInList
+      ? alert(`${name} is already in contacts`)
+      : dispatch(add({ name, number, id: nanoid(5) }));
+
+    if (!IsContactInList) {
       setName('');
       setNumber('');
     }
@@ -76,6 +81,6 @@ export const ContactForm = ({ onSubmitForm }) => {
   );
 };
 
-ContactForm.propTypes = {
-  onSubmitForm: PropTypes.func.isRequired,
-};
+// ContactForm.propTypes = {
+//   onSubmitForm: PropTypes.func.isRequired,
+// };
